@@ -1,5 +1,7 @@
 const express = require("express");
 
+const { Post, Tag, User } = require("../models");
+
 const router = express.Router();
 
 // 이미지 업로드 POST /api/post/image
@@ -15,7 +17,32 @@ router.post("/image", async (req, res, next) => {
 // 포스트 작성 POST /api/post/new
 router.post("/new", async (req, res, next) => {
   try {
+    const { title, imageUrl, tags } = req.body;
+
+    const post = await Post.create({
+      title,
+      imageUrl,
+      userId: 1,  // test용으로 1번 유저 삽입
+    });
+
+    const result = await Promise.all(tags.map(tag => Tag.findOrCreate({
+      where: { name: tag },
+    }))); // result [ [tag {}, true], [tag {}, false] ]
+    await post.addTags(result.map(tag => tag[0]));
+
+    const newPost = await Post.findOne({
+      where: { id: post.id },
+      attributes: ["id", "title", "imageUrl"],
+      include: [{
+        model: Tag,
+        attributes: ["name"]
+      }, {
+        model: User,
+        attributes: ["id", "nickname"]
+      }]
+    })
     
+    return res.status(201).send(newPost);
   } catch(error) {
     console.error(error);
     next(error);
@@ -35,7 +62,16 @@ router.patch("/:postId", async (req, res, next) => {
 // 포스트 삭제 DELETE /api/post/3
 router.delete("/:postId", async (req, res, next) => {
   try {
+    const { postId } = req.params;
 
+    const deletingPost = await Post.destroy({
+      where: { id: postId },
+    })
+    if(!deletingPost) {
+      return res.status(403).send("삭제하려는 게시글이 존재하지 않습니다.");
+    }
+
+    return res.status(200).json({ result: "success" });
   } catch(error) {
     console.error(error);
     next(error);
