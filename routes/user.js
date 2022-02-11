@@ -2,18 +2,18 @@ const express = require("express");
 
 const router = express.Router();
 
-// POST /api/user/new
-router.post("/new", async (req, res, next) => {
+// GET /api/user/new
+router.get("/new", async (req, res, next) => {
   try {
     const { userID, nickname, password } = req.body;
 
-    const test = {
+    const result = {
       test: "success",
       userID,
       nickname,
       password,
     }
-    res.status(200).json(test);
+    res.status(200).json(result);
   } catch(error) {
     console.error(error);
     next(error);
