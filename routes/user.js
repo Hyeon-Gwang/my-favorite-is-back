@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
         password: password,
       }
     })
-    
+    // 유저 정보가 없으면 예외처리
     if (!user.length) {
       throw error
     }
