@@ -24,5 +24,5 @@ module.exports = (sequelize, DataTypes) => {
     db.User.belongsToMany(db.Post, { through: "Likes", as: "Liked" });  // 유저는 여러 개의 게시글에 좋아요를 할 수 있다.
   };
 
-  return User;    //pr test
+  return User;
 };
