@@ -98,7 +98,7 @@ router.delete("/:postId", async (req, res, next) => {
       where: { id: postId },
     })
     if(!deletingPost) {
-      return res.status(403).send("삭제하려는 게시글이 존재하지 않습니다.");
+      return res.status(403).send("존재하지 않는 포스트입니다.");
     }
 
     return res.status(200).json({ result: "success" });
@@ -111,7 +111,23 @@ router.delete("/:postId", async (req, res, next) => {
 // 포스트 좋아요 누르기 GET /api/post/3/likes
 router.get("/:postId/likes", async (req, res, next) => {
   try {
+    const { postId } = req.params;
+    const post = await Post.findOne({
+      where: { id: postId },
+    });
+    const isLiking = await post.getLikers({
+      where: { id: 1 },
+    });
+    if(isLiking) {
+      return res.status(403).send("이미 좋아요를 한 포스트입니다.");
+    }
+    if(!post) {
+      return res.status(403).send("존재하지 않는 포스트입니다.");
+    };
 
+    await post.addLikers(1); // test용으로 1번 유저 삽입
+
+    return res.status(200).json({ result: "success" });
   } catch(error) {
     console.error(error);
     next(error);
@@ -121,7 +137,17 @@ router.get("/:postId/likes", async (req, res, next) => {
 // 포스트 좋아요 취소 DELETE /api/post/3/likes
 router.delete("/:postId/likes", async (req, res, next) => {
   try {
+    const { postId } = req.params;
+    const post = await Post.findOne({
+      where: { id: postId },
+    });
+    if(!post) {
+      return res.status(403).send("존재하지 않는 포스트입니다.");
+    };
 
+    await post.removeLikers(1);
+
+    return res.status(200).json({ result: "success" });
   } catch(error) {
     console.error(error);
     next(error);
