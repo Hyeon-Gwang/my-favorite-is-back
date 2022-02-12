@@ -1,6 +1,7 @@
 const express = require("express");
 const models = require('../models')
 const jwt = require('jsonwebtoken')
+const authMiddleware = require('../middlewares/auth-middleware')
 const router = express.Router();
 
 // 회원가입 POST API /api/user/new
@@ -39,8 +40,7 @@ router.post('/login', async (req, res) => {
       throw error
     }
     // jwt 토큰 발급
-    const token = jwt.sign({ userId: user.userId }, 'my-secret-key')
-
+    const token = jwt.sign({ userId: user[0].dataValues.userID }, 'my-secret-key')
     res.send({
       token,
       msg: '로그인 완료!'
@@ -51,6 +51,14 @@ router.post('/login', async (req, res) => {
       errorMessage: '회원정보를 다시 확인해주세요.'
     })
   }
+})
+
+// 사용자 인증
+router.get('/me', authMiddleware, (req, res) => {
+  const {user} = res.locals
+  res.send({
+      user
+  })
 })
 
 module.exports = router;

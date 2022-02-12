@@ -33,7 +33,8 @@ app.get("/", (req, res) => {
 
 // routers
 app.use("/api/user", userRouter);
+app.use('/api/post', postRouter)
 
 app.listen(80, () => {
-  console.log("나의최애는 server is running on port=3000");
+  console.log("나의최애는 server is running on port=80");
 });
