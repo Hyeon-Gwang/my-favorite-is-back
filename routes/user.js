@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
       throw error
     }
     // jwt 토큰 발급 여기부분 중요..
-    const token = jwt.sign({ userId: user[0].dataValues.userID }, 'my-secret-key')
+    const token = jwt.sign({ userID: user[0].dataValues.userID }, 'my-secret-key')
     res.send({
       token,
       msg: '로그인 완료!'
