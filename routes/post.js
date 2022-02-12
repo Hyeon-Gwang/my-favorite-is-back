@@ -37,14 +37,15 @@ router.post("/new", authMiddleware, async (req, res, next) => {
       attributes: ["id", "title", "imageUrl"],
       include: [{
         model: Tag,
-        attributes: ["name"],
+        attributes: ["id", "name"],
+        through: { attributes: [] },
       }, {
         model: User,
         attributes: ["id", "nickname"],
       }]
     })
     
-    return res.status(201).send(newPost);
+    return res.status(201).json(newPost);
   } catch(error) {
     console.error(error);
     next(error);
@@ -85,7 +86,8 @@ router.patch("/:postId", authMiddleware, async (req, res, next) => {
       attributes: ["id", "title", "imageUrl"],
       include: [{
         model: Tag,
-        attributes: ["name"],
+        attributes: ["id", "name"],
+        through: { attributes: [] },
       }, {
         model: User,
         attributes: ["id", "nickname"],
@@ -170,6 +172,7 @@ const upload = multer({
       done(null, "images");
     },
     filename(req, file, done) {
+      console.log('upload 내부:', file);
       const ext = path.extname(file.originalname) // 확장자 추출(.png)
       const basename = path.basename(file.originalname, ext) // 파일 이름 추출(이름)
       done(null, basename + "_" + new Date().getTime() + ext) // 이름_1518123131.png
@@ -180,7 +183,6 @@ const upload = multer({
 
 // 이미지 업로드 POST /api/post/image
 router.post("/image", upload.single("image"), (req, res, next) => {
-  console.log("req.image: ", req.image);
   res.json(req.file.filename);
 });
 
