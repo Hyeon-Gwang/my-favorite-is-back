@@ -19,6 +19,7 @@ db.sequelize.sync()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('static'))
 
 app.use(cors({
   origin: "*",
@@ -32,8 +33,8 @@ app.get("/", (req, res) => {
 
 // routers
 app.use("/api/user", userRouter);
-app.use("/api/posts", postsRouter);
-app.use("/api/post", postRouter);
+app.use('/api/post', postRouter);
+app.use('/api/posts', postsRouter);
 
 app.listen(80, () => {
   console.log("나의최애는 server is running on port=80");
