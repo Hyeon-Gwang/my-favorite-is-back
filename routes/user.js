@@ -1,6 +1,7 @@
 const express = require("express");
-const models = require('../models')
+const { User } = require('../models')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
 const authMiddleware = require('../middlewares/auth-middleware')
 const router = express.Router();
 
@@ -8,10 +9,13 @@ const router = express.Router();
 router.post("/new", async (req, res) => {
   try {
     const { userID, nickname, password, createdAt, updatedAt } = req.body;
-    await models.User.create({
+    // password 암호화
+    const encryptedPassword = bcrypt.hashSync(password, 10)
+
+    await User.create({
       userID: userID,
       nickname: nickname,
-      password: password,
+      password: encryptedPassword,
       createdAt: createdAt,
       updatedAt: updatedAt,
     })
@@ -29,7 +33,7 @@ router.post("/new", async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { userID, password } = req.body
-    const user = await models.User.findAll({
+    const user = await User.findAll({
       where: {
         userID: userID,
         password: password,
@@ -39,7 +43,7 @@ router.post('/login', async (req, res) => {
     if (!user.length) {
       throw error
     }
-    // jwt 토큰 발급
+    // jwt 토큰 발급 여기부분 중요..
     const token = jwt.sign({ userId: user[0].dataValues.userID }, 'my-secret-key')
     res.send({
       token,
@@ -53,11 +57,11 @@ router.post('/login', async (req, res) => {
   }
 })
 
-// 사용자 인증
+// 사용자 인증(로그인 상태를 확인해주는 기능)
 router.get('/me', authMiddleware, (req, res) => {
-  const {user} = res.locals
+  const { user } = res.locals
   res.send({
-      user
+    user
   })
 })
 
