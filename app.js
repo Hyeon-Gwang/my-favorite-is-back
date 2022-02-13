@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require("path");
 
 const app = express();
 
@@ -19,12 +20,14 @@ db.sequelize.sync()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('static'))
+
+// 이미지 경로
+app.use('/', express.static(path.join(__dirname, 'images')));
 
 app.use(cors({
   origin: "*",
   // credentials: true,
-}))
+}));
 
 // connections test
 app.get("/", (req, res) => {
@@ -36,6 +39,6 @@ app.use("/api/user", userRouter);
 app.use('/api/post', postRouter);
 app.use('/api/posts', postsRouter);
 
-app.listen(80, () => {
-  console.log("나의최애는 server is running on port=80");
+app.listen(8080, () => {
+  console.log("나의최애는 server is running on port=8080");
 });

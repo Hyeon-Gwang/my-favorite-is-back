@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
-const models = require('../models')
+const { User } = require('../models')
 
 module.exports = (req, res, next) => {
-    const {authorization} = req.headers
+    const { authorization } = req.headers
     const [tokenType, tokenValue] = authorization.split(' ')
 
     if (tokenType !== 'Bearer') {
@@ -13,9 +13,9 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const {userId} = jwt.verify(tokenValue, 'my-secret-key')
-        
-        models.User.findOne({where : {userId}}).then((user) => {
+        const { userID } = jwt.verify(tokenValue, 'my-secret-key')
+
+        User.findOne({ where: { userID } }).then((user) => {
             res.locals.user = user
             next()
         })
