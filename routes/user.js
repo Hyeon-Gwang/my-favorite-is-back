@@ -21,9 +21,11 @@ router.post("/new", async (req, res) => {
       msg: '회원가입 성공'
     });
   } catch (error) {
-    res.status(400).json({
-      errorMessage: '입력정보를 다시 확인해주세요.'
-    })
+    console.error(error);
+    next(error);
+    // res.status(400).json({
+    //   errorMessage: '입력정보를 다시 확인해주세요.'
+    // })
   };
 });
 
