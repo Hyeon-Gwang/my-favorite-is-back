@@ -34,7 +34,6 @@ router.post('/login', async (req, res) => {
     const user = await User.findAll({
       where: {
         userID: userID,
-        password: password,
       }
     })
     // 유저 정보가 없으면 예외처리
