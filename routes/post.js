@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const { Post, Tag, User } = require("../models");
-const authMiddleware = require("../middlewares/auth-Middleware");
+const authMiddleware = require("../middlewares/auth-middleware");
 
 const router = express.Router();
 
