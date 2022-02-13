@@ -3,6 +3,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 
+const morgan = require("morgan");
+
 const app = express();
 
 dotenv.config();
@@ -24,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // 이미지 경로
 app.use('/', express.static(path.join(__dirname, 'images')));
 
+app.use(morgan("dev"));
 app.use(cors({
   origin: "*",
   // credentials: true,
