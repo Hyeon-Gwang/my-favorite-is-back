@@ -8,7 +8,7 @@ const router = express.Router();
 // 회원가입 POST API /api/user/new
 router.post("/new", async (req, res) => {
   try {
-    const { userID, nickname, password, createdAt, updatedAt } = req.body;
+    const { userID, nickname, password } = req.body;
     // password 암호화
     const encryptedPassword = bcrypt.hashSync(password, 10)
 
@@ -16,8 +16,6 @@ router.post("/new", async (req, res) => {
       userID: userID,
       nickname: nickname,
       password: encryptedPassword,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
     })
     res.status(200).json({
       msg: '회원가입 성공'
