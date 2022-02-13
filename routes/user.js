@@ -6,7 +6,7 @@ const authMiddleware = require('../middlewares/auth-middleware')
 const router = express.Router();
 
 // 회원가입 POST API /api/user/new
-router.post("/new", async (req, res, next) => {
+router.post("/new", async (req, res) => {
   try {
     const { userID, nickname, password } = req.body;
     // password 암호화
@@ -21,11 +21,9 @@ router.post("/new", async (req, res, next) => {
       msg: '회원가입 성공'
     });
   } catch (error) {
-    console.error(error);
-    next(error);
-    // res.status(400).json({
-    //   errorMessage: '입력정보를 다시 확인해주세요.'
-    // })
+    res.status(400).json({
+      errorMessage: '입력정보를 다시 확인해주세요.'
+    })
   };
 });
 
