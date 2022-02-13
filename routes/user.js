@@ -6,7 +6,7 @@ const authMiddleware = require('../middlewares/auth-middleware')
 const router = express.Router();
 
 // 회원가입 POST API /api/user/new
-router.post("/new", async (req, res) => {
+router.post("/new", async (req, res, next) => {
   try {
     const { userID, nickname, password } = req.body;
     // password 암호화
