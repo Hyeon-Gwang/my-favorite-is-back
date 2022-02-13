@@ -172,7 +172,6 @@ const upload = multer({
       done(null, "images");
     },
     filename(req, file, done) {
-      console.log('upload 내부:', file);
       const ext = path.extname(file.originalname) // 확장자 추출(.png)
       const basename = path.basename(file.originalname, ext) // 파일 이름 추출(이름)
       done(null, basename + "_" + new Date().getTime() + ext) // 이름_1518123131.png
