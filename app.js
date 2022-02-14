@@ -42,6 +42,6 @@ app.use("/api/user", userRouter);
 app.use('/api/post', postRouter);
 app.use('/api/posts', postsRouter);
 
-app.listen(80, () => {
-  console.log("나의최애는 server is running on port=80");
+app.listen(8080, () => {
+  console.log("나의최애는 server is running on port=8080");
 });
