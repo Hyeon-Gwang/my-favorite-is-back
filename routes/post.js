@@ -42,6 +42,11 @@ router.post("/new", authMiddleware, async (req, res, next) => {
       }, {
         model: User,
         attributes: ["id", "nickname"],
+      }, {
+        model: User,
+        as: "Likers",
+        attributes: ["id"],
+        through: { attributes: [] },
       }]
     })
     
@@ -136,7 +141,25 @@ router.get("/:postId/likes", authMiddleware, async (req, res, next) => {
 
     await post.addLikers(id);
 
-    return res.status(201).json({ result: "success" });
+    const newPost = await Post.findOne({
+      where: { id: postId },
+      attributes: ["id", "title", "imageUrl"],
+      include: [{
+        model: Tag,
+        attributes: ["id", "name"],
+        through: { attributes: [] },
+      }, {
+        model: User,
+        attributes: ["id", "nickname"],
+      }, {
+        model: User,
+        as: "Likers",
+        attributes: ["id"],
+        through: { attributes: [] },
+      }]
+    });
+
+    return res.status(201).json(newPost);
   } catch(error) {
     console.error(error);
     next(error);
@@ -158,7 +181,25 @@ router.delete("/:postId/likes", authMiddleware, async (req, res, next) => {
 
     await post.removeLikers(id);
 
-    return res.status(200).json({ result: "success" });
+    const newPost = await Post.findOne({
+      where: { id: postId },
+      attributes: ["id", "title", "imageUrl"],
+      include: [{
+        model: Tag,
+        attributes: ["id", "name"],
+        through: { attributes: [] },
+      }, {
+        model: User,
+        attributes: ["id", "nickname"],
+      }, {
+        model: User,
+        as: "Likers",
+        attributes: ["id"],
+        through: { attributes: [] },
+      }]
+    });
+
+    return res.status(200).json(newPost);
   } catch(error) {
     console.error(error);
     next(error);
