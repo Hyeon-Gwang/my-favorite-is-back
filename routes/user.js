@@ -51,29 +51,32 @@ router.post('/check', async (req, res) => {
 })
 
 // 로그인 POST API /api/user/login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
   try {
     const { userID, password } = req.body
-    const user = await User.findAll({
+
+    const user = await User.findOne({
       where: {
-        userID: userID,
+        userID,
       }
     })
-    // 유저 정보가 없으면 예외처리
-    if (!user.length) {
-      throw error
+
+    if(!user) {
+      return res.status(400).send("아이디가 존재하지 않습니다.");
     }
+
     // jwt 토큰 발급 여기부분 중요..
-    const token = jwt.sign({ userID: user[0].dataValues.userID }, 'my-secret-key')
+    const token = jwt.sign({ userID: user.userID }, 'my-secret-key')
+
     res.send({
+      user,
       token,
       msg: '로그인 완료!'
     })
 
   } catch (error) {
-    res.status(400).json({
-      errorMessage: '회원정보를 다시 확인해주세요.'
-    })
+    console.error(error);
+    next(error);
   }
 })
 
