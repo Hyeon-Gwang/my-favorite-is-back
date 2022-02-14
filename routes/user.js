@@ -27,6 +27,29 @@ router.post("/new", async (req, res) => {
   };
 });
 
+// 아이디 중복 체크하기  api/user/check
+router.post('/check', async (req, res) => {
+  try {
+    const { userID } = req.body
+    const user = await User.findAll({
+      where: {
+        userID: userID,
+      }
+    })
+    if (!user.length) {
+      res.json({
+        msg: '가입가능'
+      })
+    } else {
+      throw new Error('error')
+    }
+  } catch (error) {
+    res.json({
+      errorMessage: '이미 있는 아이디입니다.'
+    })
+  }
+})
+
 // 로그인 POST API /api/user/login
 router.post('/login', async (req, res) => {
   try {
