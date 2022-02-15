@@ -16,11 +16,16 @@ router.get("/", async (req, res) => {
           {
             model: models.Tag,
             attributes: ["name"],
-            through: { attributes: [] },
           },
           {
             model: models.User,
             attributes: ["userID"],
+          },
+          {
+            model: models.User,
+            as: "Likers",
+            attributes: ["id"],
+            through: { attributes: [] },
           },
         ],
       });
@@ -40,6 +45,12 @@ router.get("/", async (req, res) => {
             {
               model: models.User,
               attributes: ["userID"],
+            },
+            {
+              model: models.User,
+              as: "Likers",
+              attributes: ["id"],
+              through: { attributes: [] },
             },
           ],
         },
