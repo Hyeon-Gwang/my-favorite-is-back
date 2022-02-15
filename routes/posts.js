@@ -12,12 +12,16 @@ router.get("/", async (req, res) => {
     //전체 게시글 조회
     if (!tag || tag === null || tag === undefined) {
       const posts = await models.Post.findAll({
-        attributes: ["id", "title", "imageUrl", "createdAt"],
+        attributes: ["id", "title", "imageUrl", "createdAt", ],
         include: [
           {
             model: models.Tag,
             attributes: ["name"],
             through: { attributes: [] },
+          },
+          {
+            model: models.User,
+            attributes: ["userID"],
           },
         ],
       });
@@ -30,7 +34,14 @@ router.get("/", async (req, res) => {
       include: [
         {
           model: models.Post,
+          attributes: ["id", "title", "imageUrl", "createdAt", ],
           through: { attributes: [] },
+          include: [
+            {
+              model: models.User,
+              attributes: ["userID"],
+            },
+          ]
         },
       ],
     });
@@ -55,7 +66,7 @@ router.get("/detail/:postId", async (req, res) => {             //   /:postId �
         },
         {
           model: models.User,
-          attributes: ["nickname"],
+          attributes: ["userID"],
         },
       ],
     });
