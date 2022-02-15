@@ -84,6 +84,12 @@ router.get("/detail/:postId", async (req, res) => {
           model: models.User,
           attributes: ["userID"],
         },
+        {
+          model: models.User,
+          as: "Likers",
+          attributes: ["id"],
+          through: { attributes: [] },
+        },
       ],
     });
     if (!detail) {
