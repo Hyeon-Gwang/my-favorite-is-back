@@ -91,7 +91,7 @@ router.get("/likes", authMiddleware, async (req, res) => {
   try {
     const { user } = res.locals;
     const mine = await models.User.findOne({
-      where: { userID: user[0].dataValues.userID },
+      where: { userID: user.userID },
       include: [
         {
           model: models.Post,
