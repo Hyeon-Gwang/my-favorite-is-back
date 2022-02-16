@@ -52,6 +52,10 @@ router.get("/", async (req, res) => {
               attributes: ["id"],
               through: { attributes: [] },
             },
+            {
+              model: models.Tag,
+              attributes: ["name"],
+            },
           ],
         },
       ],
