@@ -119,6 +119,10 @@ router.get("/likes", authMiddleware, async (req, res) => {
         as: "Likers",
         attributes: ["id"],
         through: { attributes: [] },
+      }, {
+        model: models.Tag,
+        attributes: ["id", "name"],
+        through: { attributes: [] },
       }]
     })
 
