@@ -107,17 +107,20 @@ router.get("/detail/:postId", async (req, res) => {
 router.get("/likes", authMiddleware, async (req, res) => {
   try {
     const { user } = res.locals;
-    const mine = await models.User.findOne({
+    const me = await models.User.findOne({
       where: { userID: user.userID },
-      include: [
-        {
-          model: models.Post,
-        },
-      ],
     });
-    const myLikes = await mine.getLiked({
+
+    const myLikes = await me.getLiked({
       attributes: ["id", "title", "imageUrl", "createdAt"],
-    });
+      through: { attributes: [] },
+      include: [{
+        model: models.User,
+        as: "Likers",
+        attributes: ["id"],
+        through: { attributes: [] },
+      }]
+    })
 
     if (!myLikes) {
       return res.status(400).send({
