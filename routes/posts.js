@@ -2,7 +2,6 @@ const express = require("express");
 const models = require("../models");
 const router = express.Router();
 const authMiddleware = require("../middlewares/auth-middleware");
-
 // 메인페이지
 router.get("/", async (req, res) => {
   try {
@@ -28,6 +27,7 @@ router.get("/", async (req, res) => {
             through: { attributes: [] },
           },
         ],
+        order: [["createdAt", "DESC"]],
       });
       return res.json(posts);
     }
@@ -57,6 +57,7 @@ router.get("/", async (req, res) => {
               attributes: ["name"],
             },
           ],
+          order: [["createdAt", "DESC"]],
         },
       ],
     });
@@ -118,17 +119,21 @@ router.get("/likes", authMiddleware, async (req, res) => {
     const myLikes = await me.getLiked({
       attributes: ["id", "title", "imageUrl", "createdAt"],
       through: { attributes: [] },
-      include: [{
-        model: models.User,
-        as: "Likers",
-        attributes: ["id"],
-        through: { attributes: [] },
-      }, {
-        model: models.Tag,
-        attributes: ["id", "name"],
-        through: { attributes: [] },
-      }]
-    })
+      include: [
+        {
+          model: models.User,
+          as: "Likers",
+          attributes: ["id"],
+          through: { attributes: [] },
+        }, 
+        {
+          model: models.Tag,
+          attributes: ["id", "name"],
+          through: { attributes: [] },
+        }
+      ],
+      order: [["createdAt", "DESC"]],
+    });
 
     if (!myLikes) {
       return res.status(400).send({
