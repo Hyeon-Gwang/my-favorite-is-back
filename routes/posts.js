@@ -170,7 +170,7 @@ router.get("/search/:keyword", async (req, res) => {
         },
         {
           model: models.User,
-          attributes: ["userID"],
+          attributes: ["nickname"],
         },
         {
           model: models.User,
