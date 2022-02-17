@@ -162,7 +162,7 @@ router.get("/search/:keyword", async (req, res) => {
           { "$tags.name$": { [Op.like]: "%" + keyword + "%" } },
         ],
       },
-      attributes: ["title", "imageUrl", "createdAt", "updatedAt"],
+      attributes: ["id", "title", "imageUrl", "createdAt", "updatedAt"],
       include: [
         {
           model: models.Tag,
