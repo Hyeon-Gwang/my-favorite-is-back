@@ -153,11 +153,12 @@ router.get("/likes", authMiddleware, async (req, res) => {
 router.get("/search/:keyword", async (req, res) => {
   try {
     const keyword = req.params.keyword;
+    console.log('키워드=', keyword);
     const result = await models.Post.findAll({
       where: {
         [Op.or]: [
           { title: { [Op.like]: "%" + keyword + "%" } },
-          { "$users.userID$": { [Op.like]: "%" + keyword + "%" } },
+          { "$user.userID$": { [Op.like]: "%" + keyword + "%" } },
           { "$tags.name$": { [Op.like]: "%" + keyword + "%" } },
         ],
       },
