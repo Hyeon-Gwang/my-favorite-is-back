@@ -4,8 +4,8 @@ const path = require('path');
 const fs = require('fs');
 
 // for s3 uploade
-// const multerS3 = require("multer-s3");
-// const AWS = require("aws-sdk");
+const multerS3 = require("multer-s3");
+const AWS = require("aws-sdk");
 
 const { Post, Tag, User } = require("../models");
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -100,6 +100,11 @@ router.patch("/:postId", authMiddleware, async (req, res, next) => {
       }, {
         model: User,
         attributes: ["id", "nickname"],
+      }, {
+        model: User,
+        as: "Likers",
+        attributes: ["id"],
+        through: { attributes: [] },
       }]
     })
     return res.status(200).json(patchedPost);
@@ -211,47 +216,47 @@ router.delete("/:postId/likes", authMiddleware, async (req, res, next) => {
 });
 
 // AWS Config
-// AWS.config.update({
-//   accessKeyId: process.env.S3_ACCESS_KEY_ID,
-//   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-//   region: "ap-northeast-2"
-// });
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: "ap-northeast-2"
+});
 
 // multer setting for S3 upload
-// const upload = multer({
-//   storage: multerS3({
-//     s3: new AWS.S3(),
-//     bucket: "my-favorite-is-image-storage",
-//     key(req, file, cb) {
-//       cb(null, `images/${Date.now()}_${path.basename(file.originalname)}`)
-//     }
-//   });
-// });
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: "my-favorite-is-image-storage",
+    key(req, file, cb) {
+      cb(null, `images/${Date.now()}_${path.basename(file.originalname)}`)
+    }
+  })
+});
 
 // multer 셋팅
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, "images");
-    },
-    filename(req, file, done) {
-      const ext = path.extname(file.originalname) // 확장자 추출(.png)
-      const basename = path.basename(file.originalname, ext) // 파일 이름 추출(이름)
-      done(null, basename + "_" + new Date().getTime() + ext) // 이름_1518123131.png
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
-});
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, done) {
+//       done(null, "images");
+//     },
+//     filename(req, file, done) {
+//       const ext = path.extname(file.originalname) // 확장자 추출(.png)
+//       const basename = path.basename(file.originalname, ext) // 파일 이름 추출(이름)
+//       done(null, basename + "_" + new Date().getTime() + ext) // 이름_1518123131.png
+//     },
+//   }),
+//   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+// });
 
 
 // 이미지 업로드 POST /api/post/image for S3 upload
-// router.post("/image", upload.single("image"), (req, res, next) => {
-//   res.json(req.file.location);
-// });
+router.post("/image", upload.single("image"), (req, res, next) => {
+  res.json(req.file.location);
+});
 
 // 이미지 업로드 POST /api/post/image
-router.post("/image", upload.single("image"), (req, res, next) => {
-  res.json(req.file.filename);
-});
+// router.post("/image", upload.single("image"), (req, res, next) => {
+//   res.json(req.file.filename);
+// });
 
 module.exports = router;
