@@ -53,8 +53,10 @@ root
 3. 2 ways for image upload => local upload & aws s3 upload => check out in routes/post.js
 ```
 
-# outlooks
-
+# outlook
+![1](https://user-images.githubusercontent.com/48178101/154514641-abf81ca9-7103-4fde-b5cf-7d0c882332e1.png)
+---
+![1](https://user-images.githubusercontent.com/48178101/154515416-95e2755c-7f09-4ed6-bcf2-e5e24ac14d51.gif)
 
 # check the front-end codes
 https://github.com/sws1552/react_mini_project
