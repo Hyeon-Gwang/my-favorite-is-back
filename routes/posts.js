@@ -2,7 +2,6 @@ const express = require("express");
 const models = require("../models");
 const router = express.Router();
 const authMiddleware = require("../middlewares/auth-middleware");
-const Sequelize = require("sequelize");
 // 메인페이지
 router.get("/", async (req, res) => {
   try {
