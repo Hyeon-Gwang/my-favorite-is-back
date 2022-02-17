@@ -66,6 +66,10 @@ router.post('/login', async (req, res, next) => {
       return res.status(400).send("아이디가 존재하지 않습니다.");
     }
 
+    if(user.password !== password) {
+      return res.status(400).send("비밀번호가 일치하지 않습니다.");
+    }
+
     // jwt 토큰 발급 여기부분 중요..
     const token = jwt.sign({ userID: user.userID }, 'my-secret-key')
 
