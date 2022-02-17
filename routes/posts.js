@@ -157,7 +157,7 @@ router.get("/search/:keyword", async (req, res) => {
       where: {
         [Op.or]: [
           { title: { [Op.like]: "%" + keyword + "%" } },
-          { "$User.userID$": { [Op.like]: "%" + keyword + "%" } },
+          { "$users.userID$": { [Op.like]: "%" + keyword + "%" } },
           { "$tags.name$": { [Op.like]: "%" + keyword + "%" } },
         ],
       },
@@ -170,7 +170,7 @@ router.get("/search/:keyword", async (req, res) => {
         },
         {
           model: models.User,
-          attributes: ["nickname"],
+          attributes: ["userID"],
         },
         {
           model: models.User,
