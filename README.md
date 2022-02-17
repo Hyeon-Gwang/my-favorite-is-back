@@ -50,7 +50,9 @@ root
 ```
 1. npm install
 2. create .env
-3. 2 ways for image upload => local upload & aws s3 upload => check out in routes/post.js
+3. 2 ways for image upload => local upload & aws s3 upload => check out in routes/post.js => select one
+4. development: npm run dev
+5. production: npm run start(using pm2)
 ```
 
 # outlook
