@@ -3,8 +3,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// const sequelize = require("sequelize");
-
 // for s3 uploade
 const multerS3 = require("multer-s3");
 const AWS = require("aws-sdk");
@@ -20,38 +18,6 @@ try {
   console.log('images 폴더가 없습니다. 새로 생성합니다.');
   fs.mkdirSync('images');
 };
-
-// router.get("/count", async (req, res, next) => {
-//   try {
-//     const postId = 36;
-
-//     const post = await Post.findOne({
-//       where: { id: postId },
-//       attributes: ["id", "title", "imageUrl",
-//       [sequelize.literal("SELECT COUNT(*) FROM Likes where Likes."), "LikeCount"]
-//     ],
-//       include: [{
-//         model: Tag,
-//         attributes: ["id", "name"],
-//         through: { attributes: [] },
-//       }, {
-//         model: User,
-//         attributes: ["id", "nickname"],
-//       },
-//        {
-//         model: User,
-//         as: "Likers",
-//         attributes: ["id"],
-//         through: { attributes: [] },
-//       }]
-//     })
-
-//     return res.json(post);
-//   } catch(error) {
-//     console.error(error);
-//     next(error);
-//   }
-// });
 
 // 포스트 작성 POST /api/post/new
 router.post("/new", authMiddleware, async (req, res, next) => {
