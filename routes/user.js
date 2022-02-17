@@ -66,7 +66,9 @@ router.post('/login', async (req, res, next) => {
       return res.status(400).send("아이디가 존재하지 않습니다.");
     }
 
-    if(user.password !== password) {
+    const passwordCheck = await bcrypt.compare(password, user.password)
+
+    if(!passwordCheck) {
       return res.status(400).send("비밀번호가 일치하지 않습니다.");
     }
 
